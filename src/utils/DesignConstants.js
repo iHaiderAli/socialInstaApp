@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 const AppColors = {
-  primary: '#e66125',
+  PRIMARY_COLOR: '#e66125',
   COLOR_WHITE: '#ffffff',
   BG_COLOR: '#621FF7',
   ORANGE: 'orange',
@@ -12,7 +12,9 @@ const AppColors = {
 export {AppColors};
 
 const AppIcons = {
-  // LEFT_ARROW_BUTTON: require('../../assets/left_arrow_btn.png')
+  ALERT_ICON: require('../../assets/alert.png'),
+  DUMMY_ICON: 'https://jawa.linksdev.co.uk/images/Noimage.jpg',
+
 };
 export {AppIcons};
 
@@ -80,10 +82,10 @@ const AppTexts = {
   textAtTop: 'top',
   absolute: 'absolute',
   spaceBetween: 'space-between',
-
+  NO_WRAP: 'nowrap',
   bottomText: 'bottom',
   boldText: 'bold',
-  justyfy: 'justify',
+  justify: 'justify',
   underline: 'underline',
   column: 'column',
   row: 'row',

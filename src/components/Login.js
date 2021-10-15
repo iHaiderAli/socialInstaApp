@@ -4,6 +4,7 @@ import InstagramLogin from 'react-native-instagram-login';
 
 import * as constants from '../utils/AppConstants'
 import { AppTexts, AppColors, AppDimens } from '../utils/DesignConstants'
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 class Login extends Component {
 
@@ -32,7 +33,9 @@ class Login extends Component {
 
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => this.instagramLogin.show()}>
+          onPress={() => {
+            this.instagramLogin.show();
+          }}>
           <Text style={{ color: AppColors.COLOR_WHITE, textAlign: AppTexts.centerText }}>Login now</Text>
         </TouchableOpacity>
 
@@ -46,7 +49,7 @@ class Login extends Component {
           }}
         />
 
-        <Text style={{ margin: 20 }}>Token: {this.state.token}</Text>
+        <Text style={{ margin: 20, color: Colors.black }}>Token: {this.state.token}</Text>
         {this.state.failure && (
           <View>
             <Text style={{ margin: AppDimens.ten }}>

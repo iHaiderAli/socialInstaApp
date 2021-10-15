@@ -1,6 +1,9 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Provider } from 'react-redux'
+import store from './store'
+import { View, StatusBar } from 'react-native';
 
 import * as constants from "./src/utils/AppConstants";
 import { AppTexts, AppColors } from "./src/utils/DesignConstants";
@@ -50,9 +53,14 @@ console.disableYellowBox = true;
 const App: () => Node = () => {
 
   return (
-    <NavigationContainer>
-      <NavStack />
-    </NavigationContainer>
+    <Provider store={store}>
+      <View style={{ flex: 1 }}>
+        <StatusBar translucent backgroundColor='transparent' />
+        <NavigationContainer>
+          <NavStack />
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 };
 
