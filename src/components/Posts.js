@@ -20,21 +20,6 @@ import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors, AppDimens, AppIcons } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
 
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
-
 class Posts extends AppUtils {
 
   constructor(props) {
@@ -43,24 +28,16 @@ class Posts extends AppUtils {
       page: 1,
       isRefreshing: false,
       loadMore: false,
-      messages: [],
-      pagingInfo: null,
+      posts: [],
       messageDetails: null,
     };
   }
 
   componentDidMount() {
-
-    this.getUserPosts();
-
-  }
-
-  getUserPosts() {
-
     NetInfo.fetch().then(state => {
 
       if (state.isConnected) {
-        this.getMessagesList(1);
+        this.getPostsList(1);
       } else {
         this.showAlertMsg(constants.NO_INTERNET_MSG);
       }
@@ -68,50 +45,58 @@ class Posts extends AppUtils {
     });
   }
 
-  handleLoadMore = () => {
-    if (!this.props.loading && !this.state.isRefreshing && this.state.page < this.state.pagingInfo.totalPages) {
-      this.setState({ loadMore: true });
-      let page = this.state.page + 1;
-      this.getMessagesList(page);
-    }
-  };
+  getPostsList(page) {
 
-  onRefresh() {
-    this.setState({ isRefreshing: true });
-    this.getMessagesList(1);
-  }
+    const { userId, userToken } = this.props.route.params;
 
-  getMessagesList(page) {
-
-    // this.props.sendRequestAction(constants.GET_ALL_POSTS + this.state.userInfo.homeID + "&userID=" + this.state.userInfo.userID + "&page=" + page, null, constants.METHOD_GET, this.state.userInfo.token)
-    this.props.sendRequestAction(constants.GET_ALL_POSTS, null, constants.METHOD_GET, "")
+    this.props.sendRequestAction(userId + constants.GET_ALL_POSTS + userToken + "&limit="+10, null, constants.METHOD_GET, null)
       .then((res) => {
+        console.log(res);
 
-        if (page === 1) {
+        if (page   === 1) {
           this.setState({
-            messages: this.props.response.messages,
+            posts:  this.props.response.data,
             page: page,
             isRefreshing: false,
             loadMore: false,
-            pagingInfo: this.props.response.pagingInfo,
           });
         } else {
-          let listData = this.state.messages;
-          let messages = listData.concat(this.props.response.messages);
+          let listData = this.state.posts;
+          let posts = listData.concat(this.props.response.data);
           this.setState({
-            messages: messages,
+            posts: posts,
             page: page,
             isRefreshing: false,
             loadMore: false,
-            pagingInfo: this.props.response.pagingInfo,
           });
         }
 
       })
       .catch((error) => {
         console.error(error);
-        this.showAlertMsg(constants.SOMETHING_WENT_WRONG);
+        this.showAlertMsg(constants.REQUEST_ERROR);
       });
+  }
+
+  handleLoadMore = () => {
+    if (!this.props.loading && !this.state.isRefreshing
+     && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+     && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+      this.setState({ loadMore: true });
+      let page = this.state.page + 1;
+      this.getPostsList(page);
+    }if (!this.props.loading && !this.state.isRefreshing
+     && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+     && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+      this.setState({ loadMore: true });
+      let page = this.state.page + 1;
+      this.getPostsList(page);
+    }
+  };
+
+  onRefresh() {
+    this.setState({ isRefreshing: true });
+    this.getPostsList(1);
   }
 
   renderFooter = () => {
@@ -123,39 +108,6 @@ class Posts extends AppUtils {
     );
   };
 
-  messageHeader = (item, status) => {
-    return (
-      <View style={styles.messageDetailsWithoutBorderStyle}>
-
-        <View style={{ height: AppDimens.sixtyFive, width: "15%", justifyContent: AppTexts.centerText }}>
-          <Image
-            source={{ uri: item.senderImage != "" ? item.senderImage : AppIcons.DUMMY_ICON }}
-            style={{
-              alignContent: AppTexts.flexStart,
-              resizeMode: AppTexts.resizeContain,
-              width: AppDimens.forty,
-              height: AppDimens.forty,
-              borderRadius: AppDimens.fifty,
-            }}
-          />
-
-        </View>
-
-      </View>
-    );
-  };
-
-  // getMessageDetails = (msgID, index) => {
-  //   this.props.sendRequestAction(constants.GET_MESSAGE_DETAILS + this.state.userInfo.userID + "&msgID=" + msgID, null, constants.METHOD_GET, this.state.userInfo.token)
-  //     .then((res) => {
-  //       this.setState({ messageDetails: this.props.response, isLoading: false });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       this.showAlertMsg(constants.SOMETHING_WENT_WRONG);
-  //     });
-  // };
-
   render() {
 
     const { loading } = this.props;
@@ -163,12 +115,9 @@ class Posts extends AppUtils {
     return <View
       style={{ flexWrap: AppTexts.NO_WRAP, flex: AppDimens.one }}>
 
-      {this.state.messages && this.state.messages.length ?
+      {this.state.posts && this.state.posts.length ?
         <FlatList
-          data={this.state.messages}
-          // getItemLayout={(data, index) => (
-          //     { length: 40, offset: 40 * index, index }
-          // )}
+          data={this.state.posts}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
@@ -178,8 +127,34 @@ class Posts extends AppUtils {
           renderItem={
             ({ item, index }) => {
               return (
-                <FlatListItem item={item} index={index} />);
-            }}
+                <View style={styles.card}>
+
+                  <Image
+                    source={{ uri: item.media_url }}
+                    style={styles.cardImage}
+                  />
+                  <View style={styles.cardHeader}>
+                    <Text category='s1' style={styles.cardTitle}>
+                      {item.id}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => this.props.navigation.navigate('Profile')}>
+                      <Image
+                        source={{
+                          uri:
+                            'https://images.unsplash.com/photo-1559526323-cb2f2fe2591b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'
+                        }}
+                        style={styles.cardAvatar}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text category='p2'>{item.media_type}</Text>
+                  </View>
+                </View>
+              );
+            }
+          }
           keyExtractor={(item, index) => index.toString()}
           onEndReachedThreshold={0.4}
           ListFooterComponent={this.renderFooter.bind(this)}
@@ -189,53 +164,11 @@ class Posts extends AppUtils {
         : !loading && <NoDataFound />
       }
 
-      {loading && this.state.page == 1 && !this.state.loadMore && !this.state.isRefreshing && <ActivityIndicator />}
+      {loading && this.state.page === 1 && !this.state.loadMore && !this.state.isRefreshing && <ActivityIndicator />}
 
     </View>;
   }
-}
 
-class FlatListItem extends AppUtils {
-
-  render() {
-    return (
-      <View style={{
-        flexDirection: AppTexts.row,
-        borderBottomColor: AppColors.COLOR_GREY,
-        borderBottomWidth: 0.8,
-        paddingLeft: 7,
-      }}>
-
-        <View style={{ flexDirection: AppTexts.row }}>
-          {
-            (this.state.messages == null || this.state.messages.length == 0)
-              ?
-              <View>
-                <Text style={{
-                  fontWeight: AppTexts.boldText,
-                  marginLeft: 5,
-                  marginTop: 7,
-                  textAlignVertical: AppTexts.centerText,
-                  height: 40,
-                }}>{constants.DATA_NOT_AVAILABLE}</Text>
-              </View>
-              :
-              <TouchableOpacity
-                style={{ padding: 7, backgroundColor: AppColors.COLOR_NOTIF_BG, margin: 5, borderRadius: 7 }}
-                onPress={() => {
-                  this.props.navigation.navigate(constants.POSTS_DETAIL, {
-                    postDetail: item,
-                  });
-                }}
-              >
-                <Text>{item.title}</Text>
-              </TouchableOpacity>
-          }
-        </View>
-
-      </View>
-    );
-  }
 }
 
 const styles = StyleSheet.create({
@@ -256,6 +189,34 @@ const styles = StyleSheet.create({
   timeStyle: {
     alignContent: AppTexts.centerText,
     fontSize: AppDimens.forteen,
+  },
+  container: {
+    flex: 1,
+  },
+  card: {
+    backgroundColor: AppColors.COLOR_GREY,
+    marginBottom: 25,
+  },
+  cardImage: {
+    width: "100%",
+    height: 300,
+  },
+  cardHeader: {
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cardTitle: {
+    color: AppColors.COLOR_GREY,
+  },
+  cardAvatar: {
+    marginRight: 16,
+  },
+  cardContent: {
+    padding: 10,
+    borderWidth: 0.25,
+    borderColor: AppColors.COLOR_GREY,
   },
 });
 

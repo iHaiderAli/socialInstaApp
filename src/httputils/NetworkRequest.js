@@ -4,8 +4,7 @@ export const NetworkRequest = (endPoint, payload, method, token) => {
 
 	const HEADERS_PROTECTED = {
 		'Accept': 'application/json',
-		'Content-Type': 'application/json',
-		// 'Authorization': "Bearer " + token
+		'Content-Type': 'application/json'
 	}
 
 	let fetchObj = {
