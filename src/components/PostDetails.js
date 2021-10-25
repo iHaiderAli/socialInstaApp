@@ -1,23 +1,27 @@
-import React, {Component} from 'react';
-import {Button, View, Text} from 'react-native';
+import React from 'react';
+import { Button, View, Text } from 'react-native';
+import AppUtils from "../utils/AppUtils";
+import * as constants from "../utils/AppConstants";
+import { AppTexts } from '../utils/DesignConstants';
 
-class PostDetails extends Component {
+class PostDetails extends AppUtils {
+
   constructor() {
     super();
   }
 
   render() {
     // Access the postId and otherParam via Destructuring assignment
-    const {postDetail} = this.props.route.params;
+    const { postDetail } = this.props.route.params;
 
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{ flex: 1, alignItems: AppTexts.centerText, justifyContent: AppTexts.centerText }}>
         <Text>{postDetail.title}</Text>
 
         <Button
           title="Go to Login"
           onPress={() => {
-            this.props.navigation.navigate('Login');
+            this.props.navigation.navigate(constants.LOGIN);
           }}
         />
       </View>

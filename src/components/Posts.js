@@ -5,10 +5,10 @@ import {
   RefreshControl,
   Image,
   ActivityIndicator,
-  ImageBackground,
   TouchableOpacity,
   StyleSheet, Text,
 } from "react-native";
+
 import NetInfo from "@react-native-community/netinfo";
 
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ import { sendRequestAction } from "../actions/ApiActions";
 import NoDataFound from "../utils/NoDataFound";
 
 import * as constants from "../utils/AppConstants";
-import { AppTexts, AppColors, AppDimens, AppIcons } from "../utils/DesignConstants";
+import { AppTexts, AppColors, AppDimens } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
 
 class Posts extends AppUtils {
@@ -49,13 +49,13 @@ class Posts extends AppUtils {
 
     const { userId, userToken } = this.props.route.params;
 
-    this.props.sendRequestAction(userId + constants.GET_ALL_POSTS + userToken + "&limit="+10, null, constants.METHOD_GET, null)
+    this.props.sendRequestAction(userId + constants.GET_ALL_POSTS + userToken + "&limit=" + 10, null, constants.METHOD_GET, null)
       .then((res) => {
         console.log(res);
 
-        if (page   === 1) {
+        if (page === 1) {
           this.setState({
-            posts:  this.props.response.data,
+            posts: this.props.response.data,
             page: page,
             isRefreshing: false,
             loadMore: false,
@@ -80,14 +80,14 @@ class Posts extends AppUtils {
 
   handleLoadMore = () => {
     if (!this.props.loading && !this.state.isRefreshing
-     && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-     && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+      && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+      && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
       this.setState({ loadMore: true });
       let page = this.state.page + 1;
       this.getPostsList(page);
-    }if (!this.props.loading && !this.state.isRefreshing
-     && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-     && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+    } if (!this.props.loading && !this.state.isRefreshing
+      && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+      && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
       this.setState({ loadMore: true });
       let page = this.state.page + 1;
       this.getPostsList(page);
@@ -138,12 +138,9 @@ class Posts extends AppUtils {
                       {item.id}
                     </Text>
                     <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate('Profile')}>
+                      onPress={() => this.props.navigation.navigate(constants.POSTS_DETAIL)}>
                       <Image
-                        source={{
-                          uri:
-                            'https://images.unsplash.com/photo-1559526323-cb2f2fe2591b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'
-                        }}
+                        source={{ uri: item.getProfileIcon }}
                         style={styles.cardAvatar}
                       />
                     </TouchableOpacity>
@@ -203,9 +200,9 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: AppTexts.row,
+    alignItems: AppTexts.centerText,
+    justifyContent: AppTexts.spaceBetween,
   },
   cardTitle: {
     color: AppColors.COLOR_GREY,
