@@ -41,7 +41,7 @@ class Posts extends AppUtils {
 
       if (state.isConnected) {
         this.getProfilePicture();
-        this.getPostsList(1);
+        this.getPostsList(1, constants.BASE_URL + this.props.route.params.userId + constants.GET_ALL_POSTS + this.props.route.params.userToken + "&limit=" + 10);
       } else {
         this.showAlertMsg(constants.NO_INTERNET_MSG);
       }
@@ -49,11 +49,9 @@ class Posts extends AppUtils {
     });
   }
 
-  getPostsList(page) {
+  getPostsList(page, nextPage) {
 
-    const { userId, userToken } = this.props.route.params;
-
-    this.props.sendRequestAction(constants.BASE_URL + userId + constants.GET_ALL_POSTS + userToken + "&limit=" + 10, null, constants.METHOD_GET, null)
+    this.props.sendRequestAction(nextPage, null, constants.METHOD_GET, null)
       .then((res) => {
         console.log(res);
 
@@ -115,19 +113,24 @@ class Posts extends AppUtils {
   }
 
   handleLoadMore = () => {
-    // if (!this.props.loading && !this.state.isRefreshing
-    //   && this.state.paging !== null && this.state.paging.cursors !== null
-    //   && this.state.paging.cursors.before !== this.state.paging.cursors.after) {
-    //   this.setState({ loadMore: true });
-    //   let page = this.state.page + 1;
-    //   this.getPostsList(page);
-    // }
+
+    if (!this.props.loading && this.state.paging !== null) {
+
+      let pages = this.state.paging;
+
+      if (pages.next !== undefined) {
+        this.setState({ loadMore: true });
+        let page = this.state.page + 1;
+        this.getPostsList(page, pages.next);
+      }
+
+    }
   };
 
   onRefresh() {
     this.setState({ isRefreshing: true });
     this.getProfilePicture();
-    this.getPostsList(1);
+    this.getPostsList(1, constants.BASE_URL + this.props.route.params.userId + constants.GET_ALL_POSTS + this.props.route.params.userToken + "&limit=" + 10);
   }
 
   renderFooter = () => {
@@ -197,7 +200,7 @@ class Posts extends AppUtils {
         : !loading && <NoDataFound />
       }
 
-      {loading && this.state.page === 1 && !this.state.loadMore && !this.state.isRefreshing && <ActivityIndicator />}
+      {loading && <ActivityIndicator />}
 
     </View>;
   }
