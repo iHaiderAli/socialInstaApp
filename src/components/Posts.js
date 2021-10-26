@@ -19,7 +19,6 @@ import NoDataFound from "../utils/NoDataFound";
 import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors, AppDimens } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
-import { POSTS_DETAIL } from "../utils/AppConstants";
 
 class Posts extends AppUtils {
 
@@ -30,6 +29,7 @@ class Posts extends AppUtils {
       isRefreshing: false,
       loadMore: false,
       posts: [],
+      paging: null,
       messageDetails: null,
     };
   }
@@ -57,6 +57,7 @@ class Posts extends AppUtils {
         if (page === 1) {
           this.setState({
             posts: this.props.response.data,
+            paging: this.props.response.paging,
             page: page,
             isRefreshing: false,
             loadMore: false,
@@ -66,6 +67,7 @@ class Posts extends AppUtils {
           let posts = listData.concat(this.props.response.data);
           this.setState({
             posts: posts,
+            paging: this.props.response.paging,
             page: page,
             isRefreshing: false,
             loadMore: false,
@@ -81,14 +83,8 @@ class Posts extends AppUtils {
 
   handleLoadMore = () => {
     // if (!this.props.loading && !this.state.isRefreshing
-    //   && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-    //   && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
-    //   this.setState({ loadMore: true });
-    //   let page = this.state.page + 1;
-    //   this.getPostsList(page);
-    // } if (!this.props.loading && !this.state.isRefreshing
-    //   && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-    //   && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+    //   && this.state.paging !== null && this.state.paging.cursors !== null
+    //   && this.state.paging.cursors.before !== this.state.paging.cursors.after) {
     //   this.setState({ loadMore: true });
     //   let page = this.state.page + 1;
     //   this.getPostsList(page);
