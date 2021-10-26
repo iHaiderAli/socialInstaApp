@@ -19,6 +19,7 @@ import NoDataFound from "../utils/NoDataFound";
 import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors, AppDimens } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
+import { POSTS_DETAIL } from "../utils/AppConstants";
 
 class Posts extends AppUtils {
 
@@ -79,19 +80,19 @@ class Posts extends AppUtils {
   }
 
   handleLoadMore = () => {
-    if (!this.props.loading && !this.state.isRefreshing
-      && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-      && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
-      this.setState({ loadMore: true });
-      let page = this.state.page + 1;
-      this.getPostsList(page);
-    } if (!this.props.loading && !this.state.isRefreshing
-      && this.state.response.paging !== null && this.state.response.paging.cursors !== null
-      && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
-      this.setState({ loadMore: true });
-      let page = this.state.page + 1;
-      this.getPostsList(page);
-    }
+    // if (!this.props.loading && !this.state.isRefreshing
+    //   && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+    //   && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+    //   this.setState({ loadMore: true });
+    //   let page = this.state.page + 1;
+    //   this.getPostsList(page);
+    // } if (!this.props.loading && !this.state.isRefreshing
+    //   && this.state.response.paging !== null && this.state.response.paging.cursors !== null
+    //   && this.state.response.paging.cursors.before !== this.state.response.paging.cursors.after) {
+    //   this.setState({ loadMore: true });
+    //   let page = this.state.page + 1;
+    //   this.getPostsList(page);
+    // }
   };
 
   onRefresh() {
@@ -113,7 +114,8 @@ class Posts extends AppUtils {
     const { loading } = this.props;
 
     return <View
-      style={{ flexWrap: AppTexts.NO_WRAP, flex: AppDimens.one }}>
+
+      style={{ flexWrap: AppTexts.NO_WRAP, flex: AppDimens.one, margin: 5 }}>
 
       {this.state.posts && this.state.posts.length ?
         <FlatList
@@ -127,28 +129,32 @@ class Posts extends AppUtils {
           renderItem={
             ({ item, index }) => {
               return (
-                <View style={styles.card}>
+                <View>
 
-                  <Image
-                    source={{ uri: item.media_url }}
-                    style={styles.cardImage}
-                  />
-                  <View style={styles.cardHeader}>
-                    <Text category='s1' style={styles.cardTitle}>
-                      {item.id}
+                  <View style = {{ height: 50, flexDirection: 'row', alignItems: 'center'}}>
+
+                    <Image style={styles.avatar} source={{uri: 'https://cdn.pixabay.com/photo/2020/05/26/15/42/eagle-5223559_960_720.jpg'}}/>
+
+                    <Text style={styles.subjectText}>
+                     {item.username}
                     </Text>
-                    <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate(constants.POSTS_DETAIL)}>
-                      <Image
-                        source={{ uri: item.getProfileIcon }}
-                        style={styles.cardAvatar}
-                      />
-                    </TouchableOpacity>
+
                   </View>
-                  <View style={styles.cardContent}>
-                    <Text category='p2'>{item.media_type}</Text>
-                  </View>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate(constants.POSTS_DETAIL, {
+                        postDetail: item
+                      })
+                    }}>
+                    <Image
+                      source={{ uri: item.media_url }}
+                      style={styles.cardImage}
+                    />
+                  </TouchableOpacity>
+
                 </View>
+
               );
             }
           }
@@ -169,52 +175,21 @@ class Posts extends AppUtils {
 }
 
 const styles = StyleSheet.create({
-  dateText: {
-    color: AppColors.COLOR_WHITE,
-    fontSize: AppDimens.twelve,
-    marginBottom: AppDimens.three,
+
+  avatar: {
+    width: 30,
+    height: 30,
+    borderRadius: 1000,
   },
-  subjectText: { alignContent: AppTexts.flexStart, width: "100%", fontSize: AppDimens.thirteen },
-  messageDetailsWithoutBorderStyle: {
-    height: AppDimens.seventy,
-    width: "100%",
-    flexDirection: AppTexts.row,
-    flex: AppDimens.one,
-    paddingRight: AppDimens.five,
-    alignContent: AppTexts.flexStart,
-  },
-  timeStyle: {
-    alignContent: AppTexts.centerText,
-    fontSize: AppDimens.forteen,
-  },
-  container: {
-    flex: 1,
-  },
-  card: {
-    backgroundColor: AppColors.COLOR_GREY,
-    marginBottom: 25,
-  },
+
+  subjectText: { marginStart: 10, fontSize: AppDimens.thirteen },
+
   cardImage: {
     width: "100%",
     height: 300,
-  },
-  cardHeader: {
-    padding: 10,
-    flexDirection: AppTexts.row,
-    alignItems: AppTexts.centerText,
-    justifyContent: AppTexts.spaceBetween,
-  },
-  cardTitle: {
-    color: AppColors.COLOR_GREY,
-  },
-  cardAvatar: {
-    marginRight: 16,
-  },
-  cardContent: {
-    padding: 10,
-    borderWidth: 0.25,
-    borderColor: AppColors.COLOR_GREY,
-  },
+    marginTop: 10
+  }
+
 });
 
 const mapStateToProps = (state) => {

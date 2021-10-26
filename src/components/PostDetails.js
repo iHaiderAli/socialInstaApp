@@ -16,7 +16,6 @@ class PostDetails extends AppUtils {
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, justifyContent: AppTexts.centerText }}>
-        <Text>{postDetail.title}</Text>
 
         <Button
           title="Go to Login"
@@ -24,6 +23,7 @@ class PostDetails extends AppUtils {
             this.props.navigation.navigate(constants.LOGIN);
           }}
         />
+
       </View>
     );
   }
