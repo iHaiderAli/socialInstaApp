@@ -20,6 +20,7 @@ import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors, AppDimens } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
 import { GET_PROFILE_IMAGE } from "../utils/AppConstants";
+import Moment from "moment";
 
 class Posts extends AppUtils {
 
@@ -168,10 +169,18 @@ class Posts extends AppUtils {
 
                     <Image style={styles.avatar} source={{uri: this.state.profile_pic_url}}/>
 
-                    <Text style={styles.subjectText}>
-                     {item.username}
-                    </Text>
-
+                    <View style = {{ marginStart: 10, marginTop: 10, height: 50, flexDirection: 'column', alignItems: 'center'}}>
+                      <Text style={styles.subjectText}>
+                        {
+                          item.username
+                        }
+                      </Text>
+                      <Text style={styles.subjectText}>
+                        {
+                          Moment(item.timestamp).format(constants.DATE_FORMAT_DDD_MMM_DD_YYYY)
+                        }
+                      </Text>
+                    </View>
                   </View>
 
                   <TouchableOpacity
@@ -215,7 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: 1000,
   },
 
-  subjectText: { marginStart: 10, fontSize: AppDimens.thirteen },
+  subjectText: { fontSize: AppDimens.thirteen },
 
   cardImage: {
     width: "100%",

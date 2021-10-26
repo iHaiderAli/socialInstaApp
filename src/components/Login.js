@@ -76,10 +76,10 @@ class Login extends AppUtils {
 const styles = StyleSheet.create({
   btn: {
     borderRadius: AppDimens.five,
-    margin: 20,
+    margin: 50,
     backgroundColor: AppColors.ORANGE,
-    height: 30,
-    width: AppDimens.hundred,
+    height: 50,
+    width: AppDimens.twoHundred,
     justifyContent: AppTexts.centerText,
     alignItems: AppTexts.centerText,
   }
