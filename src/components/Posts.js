@@ -19,6 +19,7 @@ import NoDataFound from "../utils/NoDataFound";
 import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors, AppDimens } from "../utils/DesignConstants";
 import AppUtils from "../utils/AppUtils";
+import { GET_PROFILE_IMAGE } from "../utils/AppConstants";
 
 class Posts extends AppUtils {
 
@@ -31,6 +32,7 @@ class Posts extends AppUtils {
       posts: [],
       paging: null,
       messageDetails: null,
+      profile_pic_url : null
     };
   }
 
@@ -38,6 +40,7 @@ class Posts extends AppUtils {
     NetInfo.fetch().then(state => {
 
       if (state.isConnected) {
+        this.getProfilePicture();
         this.getPostsList(1);
       } else {
         this.showAlertMsg(constants.NO_INTERNET_MSG);
@@ -50,7 +53,7 @@ class Posts extends AppUtils {
 
     const { userId, userToken } = this.props.route.params;
 
-    this.props.sendRequestAction(userId + constants.GET_ALL_POSTS + userToken + "&limit=" + 10, null, constants.METHOD_GET, null)
+    this.props.sendRequestAction(constants.BASE_URL + userId + constants.GET_ALL_POSTS + userToken + "&limit=" + 10, null, constants.METHOD_GET, null)
       .then((res) => {
         console.log(res);
 
@@ -81,6 +84,36 @@ class Posts extends AppUtils {
       });
   }
 
+  getProfilePicture() {
+
+    const { userId, userToken } = this.props.route.params;
+
+    this.props.sendRequestAction(constants.BASE_URL + constants.API_VERSION + userId + "?fields=id,username&access_token=" + userToken, null, constants.METHOD_GET, null)
+      .then((res) => {
+
+        console.log(this.props.response.username);
+
+        this.props.sendRequestAction(constants.BASE_URL_INSTA + this.props.response.username + constants.GET_PROFILE_IMAGE, null, constants.METHOD_GET, null)
+          .then((res) => {
+            let graphql = this.props.response.graphql;
+            let user = graphql.user;
+            let profile_pic_url = user.profile_pic_url;
+            this.setState({
+              profile_pic_url : profile_pic_url
+            })
+          })
+          .catch((error) => {
+            console.error(error);
+            this.showAlertMsg(constants.REQUEST_ERROR);
+          });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        this.showAlertMsg(constants.REQUEST_ERROR);
+      });
+  }
+
   handleLoadMore = () => {
     // if (!this.props.loading && !this.state.isRefreshing
     //   && this.state.paging !== null && this.state.paging.cursors !== null
@@ -93,6 +126,7 @@ class Posts extends AppUtils {
 
   onRefresh() {
     this.setState({ isRefreshing: true });
+    this.getProfilePicture();
     this.getPostsList(1);
   }
 
@@ -129,7 +163,7 @@ class Posts extends AppUtils {
 
                   <View style = {{ height: 50, flexDirection: 'row', alignItems: 'center'}}>
 
-                    <Image style={styles.avatar} source={{uri: 'https://cdn.pixabay.com/photo/2020/05/26/15/42/eagle-5223559_960_720.jpg'}}/>
+                    <Image style={styles.avatar} source={{uri: this.state.profile_pic_url}}/>
 
                     <Text style={styles.subjectText}>
                      {item.username}

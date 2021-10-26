@@ -13,8 +13,8 @@ export const NetworkRequest = (endPoint, payload, method, token) => {
     token != null ? fetchObj.headers = HEADERS_PROTECTED : null,
     method !== 'GET' ? fetchObj.body = payload : null;
 
-	console.log("EndPoint: ", BASE_URL + endPoint + " Payload" + JSON.stringify(fetchObj.body));
-	return fetch(BASE_URL + endPoint, fetchObj)
+	console.log("EndPoint: ", endPoint + " Payload" + JSON.stringify(fetchObj.body));
+	return fetch(endPoint, fetchObj)
 		.then(handleErrors)
 		.then((response) => {
 			console.log("EndPoint: ", JSON.stringify(response));
@@ -24,9 +24,6 @@ export const NetworkRequest = (endPoint, payload, method, token) => {
 				let error = response;
 				throw error;
 			}
-		})
-		.then((res) => {
-			return res
 		})
 		.catch((error) => {
 			console.log(error.message)
