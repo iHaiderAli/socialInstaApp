@@ -32,3 +32,9 @@ export const POSTS_DETAILS = 'Post Details';
 
 export const INSTA_TOKEN = 'instaToken';
 export const DATA_NOT_AVAILABLE = 'Data Not Available.';
+
+export const STR_MOBILE_NO = 'Mobile Number'
+export const STR_LOGIN_INFO = "Let’s Get Started"
+export const STR_LOGIN_INFO_1 = "Enter your mobile number to signup for SenPi"
+export const STR_LOGIN = "LOG IN"
+export const STR_FORGOT_PASSWORD = "Forgot password?"

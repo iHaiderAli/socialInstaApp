@@ -1,13 +1,15 @@
 import {StyleSheet} from 'react-native';
 
 const AppColors = {
-  PRIMARY_COLOR: '#e66125',
+  PRIMARY_COLOR: '#171531',
+  SECONDARY_COLOR: '#3D56F0',
   COLOR_WHITE: '#ffffff',
   BG_COLOR: '#621FF7',
   ORANGE: 'orange',
   GREEN: 'green',
   COLOR_NOTIF_BG: '#fbaf5d',
   COLOR_GREY: '#666666',
+  INPUT_TEXT_BACKGROUND: '#232048',
 };
 export {AppColors};
 
@@ -94,6 +96,7 @@ const AppTexts = {
   resizeContain: 'contain',
   resizeCover: 'cover',
   stretch: 'stretch',
+  large: 'large',
 
   fontFamily: 'museo-sans-300',
 };

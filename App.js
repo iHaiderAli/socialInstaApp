@@ -21,7 +21,7 @@ function NavStack() {
       screenOptions={{
         headerTitleAlign: AppTexts.centerText,
         headerStyle: {
-          backgroundColor: AppColors.BG_COLOR,
+          backgroundColor: AppColors.PRIMARY_COLOR,
         },
         headerTintColor: AppColors.COLOR_WHITE,
         headerTitleStyle: {
