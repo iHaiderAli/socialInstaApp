@@ -1,23 +1,91 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
-import { Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button, Alert } from 'react-native';
 
 import * as constants from '../utils/AppConstants'
 import { AppTexts, AppColors, AppDimens } from '../utils/DesignConstants'
 import AppUtils from '../utils/AppUtils';
+import NetInfo from '@react-native-community/netinfo'
+import ActivityIndicator from '../utils/ActivityIndicatorRed'
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { sendRequestAction } from "../actions/ApiActions";
+import PhoneInput from 'react-native-phone-number-input';
 
 class Login extends AppUtils {
 
   constructor(props) {
     super(props);
-    this.state = { userName: '', password: '', unitPos: 0, isSubmitting: false, error: '', success: false, loading: false, response: null, isLoading: true }
+    this.state = { countaryCode: '', phoneNumber: '', isSubmitting: false, error: '', success: false, loading: false, response: null, isLoading: true }
+  }
+
+  async doUserLogin() {
+
+    if (this.state.phoneNumber == '') {
+      this.showAlertMsg(constants.STR_PHONE_NO_REQUIRED);
+      return
+    }
+
+    let dataToSend = new FormData();
+    dataToSend.append('phone', '+923234245158')
+
+    // try {
+
+    //   let fcmToken = await AsyncStorage.getItem(constants.FCM_TOKEN);
+    //   if (!fcmToken) {
+    //     this.showAlertMsg(constants.DEVICE_TOKEN_NOT_AVAILABLE)
+    //     return
+    //   }
+
+    //   dataToSend.append(constants.FCM_TOKEN_SMALL, fcmToken);
+    //   dataToSend.append(constants.DEVICE_ID, DeviceInfo.getDeviceId());
+
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    NetInfo.fetch().then(state => {
+
+      if (state.isConnected) {
+
+        this.props.sendRequestAction(constants.SEND_OTP, dataToSend, constants.METHOD_POST, null)
+          .then((res) => {
+
+            if (this.props.success) {
+              if (this.props.response.status.code == '200') {
+                this.setState({ phoneNumber: '' })
+                this.saveValueInSharedPref(constants.SP_IS_LOGGED_IN, constants.SP_IS_LOGGED_IN)
+                this.saveValueInSharedPref(constants.SP_USER_TOKEN, JSON.stringify(this.props.response.data.token))
+
+                this.showAlertMsg(this.props.response.message);
+
+                // this.props.navigation.navigate(constants.POSTS, {
+                //   userToken: token,
+                //   otherParam: 'Pass whatever you want here',
+                // });
+                
+              } else {
+                this.showAlertMsg(this.props.response.status.message);
+              }
+            } else {
+              this.showAlertMsg(this.props.error)
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            this.showAlertMsg(constants.SOMETHING_WENT_WRONG)
+          });
+
+      } else {
+        this.showAlertMsg(constants.NO_INTERNET_MSG)
+      }
+
+    });
   }
 
   render() {
+
+    const { navigation, loading } = this.props;
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
@@ -29,34 +97,61 @@ class Login extends AppUtils {
           style={{ color: 'rgba(255,255,255,0.8)', fontSize: AppDimens.twenty, textAlign: AppTexts.centerText, marginTop: AppDimens.five }}
         >{constants.STR_LOGIN_INFO_1}</Text>
 
-        <TextInput
-          style={{
-            width: '80%', height: AppDimens.sixty, color: AppColors.COLOR_WHITE,
-            fontFamily: AppTexts.font_Ubuntu_Regular, borderColor: AppColors.INPUT_TEXT_BACKGROUND,
-            backgroundColor: AppColors.INPUT_TEXT_BACKGROUND, alignSelf: AppTexts.centerText,
-            marginTop: AppDimens.hundred, borderRadius: AppDimens.fifteen, padding: AppDimens.ten, fontSize: AppDimens.twenty
+        <PhoneInput
+          defaultValue={''}
+          defaultCode="PK"
+          layout="first"
+          withDarkTheme={true}
+          autoFocus
+          flagButtonStyle={{
+            backgroundColor: AppColors.COLOR_WHITE,
           }}
-          placeholder={constants.STR_MOBILE_NO}
-          returnKeyType={'next'}
-          autoCapitalize={"none"}
-          placeholderTextColor={'rgba(255,255,255,0.3)'}
-          value={this.state.userName}
-          onChangeText={(input) => {
-            this.setState({ userName: input })
-          }} />
+          countryPickerButtonStyle={{
+            backgroundColor: AppColors.INPUT_TEXT_BACKGROUND,
+            borderRadius: AppDimens.fifteen
+          }}
+          codeTextStyle={{
+            color: AppColors.COLOR_WHITE,
+            fontSize: AppDimens.eighteen
+          }}
+          textInputStyle={{
+            color: AppColors.COLOR_WHITE,
+            fontSize: AppDimens.eighteen
+          }}
+          containerStyle={{
+            width: '80%',
+            height: AppDimens.sixty,
+            backgroundColor: AppColors.INPUT_TEXT_BACKGROUND,
+            marginTop: AppDimens.hundred,
+            borderRadius: AppDimens.fifty,
+          }}
+          textContainerStyle={{ paddingVertical: 0, backgroundColor: AppColors.INPUT_TEXT_BACKGROUND, borderRadius: AppDimens.fifteen }}
+          // onChangeText={(text) => {
+          //   //Text change listener        
+          //   this.setState({ phoneNumber: text })
+          // }}
+
+          onChangeFormattedText={(text) => {
+            this.setState({ phoneNumber: text })
+          }}
+        />
 
         <TouchableOpacity
-          style={{ alignSelf: AppTexts.centerText, width: '80%',  height: AppDimens.sixty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
+          style={{ alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
           onPress={() => {
-            this.doUserLogin()
+              this.doUserLogin()
           }}>
 
           <Text
-            style={{ color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed, 
-              alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.sixty }}
+            style={{
+              color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed,
+              alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.sixty
+            }}
           >{constants.STR_LOGIN}</Text>
 
         </TouchableOpacity>
+
+        {loading && <ActivityIndicator />}
 
       </View>
     );

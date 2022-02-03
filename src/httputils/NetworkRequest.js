@@ -1,4 +1,4 @@
-import { BASE_URL } from '../utils/AppConstants';
+import { BASE_URL_STAGGING, BASE_URL_LIVE } from '../utils/AppConstants';
 
 export const NetworkRequest = (endPoint, payload, method, token) => {
 
@@ -13,11 +13,10 @@ export const NetworkRequest = (endPoint, payload, method, token) => {
     token != null ? fetchObj.headers = HEADERS_PROTECTED : null,
     method !== 'GET' ? fetchObj.body = payload : null;
 
-	console.log("EndPoint: ", endPoint + " Payload" + JSON.stringify(fetchObj.body));
-	return fetch(endPoint, fetchObj)
+	console.log("EndPoint: ", BASE_URL_STAGGING+endPoint + " Payload" + JSON.stringify(payload));
+	return fetch(BASE_URL_STAGGING+endPoint, fetchObj)
 		.then(handleErrors)
 		.then((response) => {
-			console.log("EndPoint: ", JSON.stringify(response));
 			if (response.status >= 200 && response.status < 300) {
 				return response.json();
 			} else {
