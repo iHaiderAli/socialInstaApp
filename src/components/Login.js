@@ -23,31 +23,37 @@ class Login extends AppUtils {
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
 
         <Text
-          style={{ color: AppColors.COLOR_WHITE, alignItems: AppTexts.centerText, marginTop: AppDimens.thirty}}
+          style={{ color: AppColors.COLOR_WHITE, fontSize: AppDimens.twenty, fontWeight: AppTexts.boldText, alignItems: AppTexts.centerText, marginTop: AppDimens.thirty }}
         >{constants.STR_LOGIN_INFO}</Text>
         <Text
-          style={{ color: AppColors.COLOR_WHITE, alignItems: AppTexts.centerText, marginTop: AppDimens.ten}}
+          style={{ color: 'rgba(255,255,255,0.8)', fontSize: AppDimens.twenty, textAlign: AppTexts.centerText, marginTop: AppDimens.five }}
         >{constants.STR_LOGIN_INFO_1}</Text>
 
         <TextInput
-          style={{ width: '75%', height: AppDimens.fifty, color: AppColors.COLOR_GREY, fontFamily: AppTexts.font_Ubuntu_Regular, borderColor: AppColors.INPUT_TEXT_BACKGROUND, backgroundColor: AppColors.INPUT_TEXT_BACKGROUND, alignSelf: AppTexts.centerText, marginTop: AppDimens.fifteen, borderRadius: AppDimens.fifteen, padding: AppDimens.ten, fontSize: AppDimens.fifteen }}
+          style={{
+            width: '80%', height: AppDimens.sixty, color: AppColors.COLOR_WHITE,
+            fontFamily: AppTexts.font_Ubuntu_Regular, borderColor: AppColors.INPUT_TEXT_BACKGROUND,
+            backgroundColor: AppColors.INPUT_TEXT_BACKGROUND, alignSelf: AppTexts.centerText,
+            marginTop: AppDimens.hundred, borderRadius: AppDimens.fifteen, padding: AppDimens.ten, fontSize: AppDimens.twenty
+          }}
           placeholder={constants.STR_MOBILE_NO}
           returnKeyType={'next'}
           autoCapitalize={"none"}
-          placeholderTextColor={AppColors.COLOR_GREY}
+          placeholderTextColor={'rgba(255,255,255,0.3)'}
           value={this.state.userName}
           onChangeText={(input) => {
             this.setState({ userName: input })
           }} />
 
         <TouchableOpacity
-          style={{ alignSelf: AppTexts.centerText, width: AppDimens.twoHundred, height: AppDimens.fifty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
+          style={{ alignSelf: AppTexts.centerText, width: '80%',  height: AppDimens.sixty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
           onPress={() => {
             this.doUserLogin()
           }}>
 
           <Text
-            style={{ color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed, alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.fifty }}
+            style={{ color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed, 
+              alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.sixty }}
           >{constants.STR_LOGIN}</Text>
 
         </TouchableOpacity>
