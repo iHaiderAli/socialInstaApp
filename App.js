@@ -8,16 +8,16 @@ import { View, StatusBar } from 'react-native';
 import * as constants from "./src/utils/AppConstants";
 import { AppTexts, AppColors } from "./src/utils/DesignConstants";
 
-import Login from "./src/components/Login";
-import Posts from "./src/components/Posts";
-import PostDetails from "./src/components/PostDetails";
+import LoginScreen from "./src/components/LoginScreen";
+import OTPVerificationScreen from "./src/components/OTPVerificationScreen";
+import HomeScreen from "./src/components/HomeScreen";
 
 const Stack = createStackNavigator();
 
 function NavStack() {
   return (
     <Stack.Navigator
-      initialRouteName="auth"
+      initialRouteName={constants.LOGIN_SCREEN}
       screenOptions={{
         headerTitleAlign: AppTexts.centerText,
         headerStyle: {
@@ -30,19 +30,19 @@ function NavStack() {
       }}
     >
       <Stack.Screen
-        name={constants.LOGIN}
-        component={Login}
-        options={{ title: constants.LOGIN }}
+        name={constants.LOGIN_SCREEN}
+        component={LoginScreen}
+        options={{ title: constants.LOGIN_SCREEN_TITLE }}
       />
       <Stack.Screen
-        name={constants.POSTS}
-        component={Posts}
-        options={{ title: constants.POSTS }}
+        name={constants.VERIFICATION_SCREEN}
+        component={OTPVerificationScreen}
+        options={{ title: constants.VERIFICATION_SCREEN_TITLE }}
       />
       <Stack.Screen
-        name={constants.POSTS_DETAIL}
-        component={PostDetails}
-        options={{ title: constants.POSTS_DETAILS }}
+        name={constants.HOME_SCREEN}
+        component={HomeScreen}
+        options={{ title: constants.HOME_SCREEN_TITLE }}
       />
 
     </Stack.Navigator>

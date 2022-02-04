@@ -4,7 +4,7 @@ import AppUtils from "../utils/AppUtils";
 import * as constants from "../utils/AppConstants";
 import { AppTexts } from '../utils/DesignConstants';
 
-class PostDetails extends AppUtils {
+class HomeScreen extends AppUtils {
 
   constructor() {
     super();
@@ -20,7 +20,7 @@ class PostDetails extends AppUtils {
         <Button
           title="Go to Login"
           onPress={() => {
-            this.props.navigation.navigate(constants.LOGIN);
+            this.props.navigation.navigate(constants.LOGIN_SCREEN);
           }}
         />
 
@@ -29,4 +29,4 @@ class PostDetails extends AppUtils {
   }
 }
 
-export default PostDetails;
+export default HomeScreen;

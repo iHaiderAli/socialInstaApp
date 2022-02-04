@@ -12,11 +12,11 @@ import { bindActionCreators } from "redux";
 import { sendRequestAction } from "../actions/ApiActions";
 import PhoneInput from 'react-native-phone-number-input';
 
-class Login extends AppUtils {
+class LoginScreen extends AppUtils {
 
   constructor(props) {
     super(props);
-    this.state = { countaryCode: '', phoneNumber: '', isSubmitting: false, error: '', success: false, loading: false, response: null, isLoading: true }
+    this.state = { phoneNumber: '' }
   }
 
   async doUserLogin() {
@@ -26,16 +26,16 @@ class Login extends AppUtils {
       return
     }
 
-    // let dataToSend = new FormData();
-    // dataToSend.append('phone', this.state.phoneNumber)
+    let dataToSend = new FormData();
+    dataToSend.append('phone', this.state.phoneNumber)
 
     // let dataToSend = JSON.stringify({
     //   phone: this.state.phoneNumber
     // })
 
-    let dataToSend = {
-      phone: this.state.phoneNumber
-    }
+    // let dataToSend = {
+    //   phone: this.state.phoneNumber
+    // }
 
     // try {
 
@@ -94,7 +94,7 @@ class Login extends AppUtils {
 
   render() {
 
-    const { navigation, loading } = this.props;
+    const { loading } = this.props;
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
@@ -146,11 +146,14 @@ class Login extends AppUtils {
         />
 
         <TouchableOpacity
-          style={{ alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
+          style={{
+            alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty,
+            backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen
+          }}
           onPress={() => {
             // this.doUserLogin()
 
-            this.props.navigation.navigate(constants.POSTS, {
+            this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
               userToken: 'sdfa',
               otherParam: 'Pass whatever you want here',
             });
@@ -161,7 +164,7 @@ class Login extends AppUtils {
               color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed,
               alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.sixty
             }}
-          >{constants.STR_LOGIN}</Text>
+          >{constants.STR_CONTINUE}</Text>
 
         </TouchableOpacity>
 
@@ -201,4 +204,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
