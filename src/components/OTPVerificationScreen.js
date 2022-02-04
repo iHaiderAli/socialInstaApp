@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 import * as constants from '../utils/AppConstants'
 import { AppTexts, AppColors, AppDimens } from '../utils/DesignConstants'
@@ -15,7 +15,7 @@ class OTPVerificationScreen extends AppUtils {
 
   constructor(props) {
     super(props);
-    this.state = { otpNumber: '', isSubmitting: false, error: '', success: false, loading: false, response: null, isLoading: true }
+    this.state = { otpNumber: '' }
   }
 
   async verifyOTP() {
@@ -26,13 +26,13 @@ class OTPVerificationScreen extends AppUtils {
     }
 
     let dataToSend = new FormData();
-    dataToSend.append('phone', this.state.otpNumber)
+    dataToSend.append('otp', this.state.otpNumber)
 
     NetInfo.fetch().then(state => {
 
       if (state.isConnected) {
 
-        this.props.sendRequestAction(constants.VERIFY_OTP, dataToSend, constants.METHOD_POST, null)
+        this.props.sendRequestAction(constants.VERIFY_OTP, dataToSend, constants.METHOD_POST, "Bearer " +this.props.route.params.otpToken)
           .then((res) => {
 
             if (this.props.success) {
@@ -42,10 +42,9 @@ class OTPVerificationScreen extends AppUtils {
                 this.saveValueInSharedPref(constants.SP_IS_LOGGED_IN, constants.SP_IS_LOGGED_IN)
                 this.saveValueInSharedPref(constants.SP_USER_TOKEN, JSON.stringify(this.props.response.data.token))
 
-                // this.props.navigation.navigate(constants.POSTS, {
-                //   userToken: token,
-                //   otherParam: 'Pass whatever you want here',
-                // });
+                this.props.navigation.navigate(constants.HOME_SCREEN, {
+                  param: 'Pass whatever you want here',
+                });
 
               } else {
                 this.showAlertMsg(this.props.response.status.message);
@@ -69,6 +68,8 @@ class OTPVerificationScreen extends AppUtils {
   render() {
 
     const { loading } = this.props;
+    // Access the postId and otherParam via Destructuring assignment
+    const { otpToken } = this.props.route.params;
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
@@ -77,9 +78,27 @@ class OTPVerificationScreen extends AppUtils {
           style={{ color: 'rgba(255,255,255,0.8)', fontSize: AppDimens.twenty, textAlign: AppTexts.centerText, marginTop: AppDimens.five }}
         >{constants.STR_LOGIN_INFO_2}</Text>
 
+        <TextInput
+          style={{
+            width: '80%', height: AppDimens.sixty, color: AppColors.COLOR_WHITE,
+            fontFamily: AppTexts.font_Ubuntu_Regular, borderColor: AppColors.INPUT_TEXT_BACKGROUND,
+            backgroundColor: AppColors.INPUT_TEXT_BACKGROUND, alignSelf: AppTexts.centerText,
+            marginTop: AppDimens.hundred, borderRadius: AppDimens.fifteen, padding: AppDimens.ten, fontSize: AppDimens.twenty
+          }}
+          placeholder={constants.STR_OTP}
+          returnKeyType={'next'}
+          autoCapitalize={"none"}
+          placeholderTextColor={'rgba(255,255,255,0.3)'}
+          value={this.state.otpNumber}
+          onChangeText={(input) => {
+            this.setState({ otpNumber: input })
+          }} />
+
         <TouchableOpacity
-          style={{ alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty, 
-          backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
+          style={{
+            alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty,
+            backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen
+          }}
           onPress={() => {
             // this.verifyOTP()
 

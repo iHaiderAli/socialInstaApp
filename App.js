@@ -8,6 +8,7 @@ import { View, StatusBar } from 'react-native';
 import * as constants from "./src/utils/AppConstants";
 import { AppTexts, AppColors } from "./src/utils/DesignConstants";
 
+import SplashScreen from "./src/components/SplashScreen";
 import LoginScreen from "./src/components/LoginScreen";
 import OTPVerificationScreen from "./src/components/OTPVerificationScreen";
 import HomeScreen from "./src/components/HomeScreen";
@@ -17,7 +18,7 @@ const Stack = createStackNavigator();
 function NavStack() {
   return (
     <Stack.Navigator
-      initialRouteName={constants.LOGIN_SCREEN}
+      initialRouteName={constants.SPLASH_SCREEN}
       screenOptions={{
         headerTitleAlign: AppTexts.centerText,
         headerStyle: {
@@ -25,14 +26,19 @@ function NavStack() {
         },
         headerTintColor: AppColors.COLOR_WHITE,
         headerTitleStyle: {
-          fontWeight: AppTexts.boldText,
+          fontWeight: '100',
         },
-      }}
-    >
+      }}>
+        
+      <Stack.Screen
+        name={constants.SPLASH_SCREEN}
+        component={SplashScreen}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name={constants.LOGIN_SCREEN}
         component={LoginScreen}
-        options={{ title: constants.LOGIN_SCREEN_TITLE }}
+        options={{ headerShown: false, title: constants.LOGIN_SCREEN_TITLE }}
       />
       <Stack.Screen
         name={constants.VERIFICATION_SCREEN}
@@ -42,7 +48,7 @@ function NavStack() {
       <Stack.Screen
         name={constants.HOME_SCREEN}
         component={HomeScreen}
-        options={{ title: constants.HOME_SCREEN_TITLE }}
+        options={{ headerShown: false, title: constants.HOME_SCREEN_TITLE }}
       />
 
     </Stack.Navigator>

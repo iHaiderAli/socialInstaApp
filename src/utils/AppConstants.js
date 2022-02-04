@@ -21,7 +21,8 @@ export const USER_TOKEN = "USER_TOKEN"
 export const USER_ID = "USER_ID"
 
 export const NO_INTERNET_MSG = "No Internet connection. Try Again!"
-export const LOGIN_SCREEN = 'Login';
+export const SPLASH_SCREEN = 'SplashScreen';
+export const LOGIN_SCREEN = 'LoginScreen';
 export const LOGIN_SCREEN_TITLE = 'Login';
 export const VERIFICATION_SCREEN = 'OTPVerificationScreen';
 export const VERIFICATION_SCREEN_TITLE = 'Verification';
@@ -33,6 +34,7 @@ export const STR_LOGIN_INFO = "Let’s Get Started"
 export const STR_LOGIN_INFO_1 = "Enter your mobile number to \n signup for SenPi"
 export const STR_LOGIN_INFO_2 = "We texted you a code to \n verify your phone numbder"
 export const STR_CONTINUE = "CONTINUE"
+export const STR_OTP = "OTP number"
 
 //Warning msgs
 export const STR_PHONE_NO_REQUIRED = "Please enter phone number"

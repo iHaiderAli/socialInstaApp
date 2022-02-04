@@ -15,8 +15,9 @@ export {AppColors};
 
 const AppIcons = {
   ALERT_ICON: require('../../assets/alert.png'),
+  LOGO_ICON: require('../../assets/ic_launcher.png'),
+  LOGO_ROUND_ICON: require('../../assets/ic_launcher_round.png'),
   DUMMY_ICON: 'https://jawa.linksdev.co.uk/images/Noimage.jpg',
-
 };
 export {AppIcons};
 

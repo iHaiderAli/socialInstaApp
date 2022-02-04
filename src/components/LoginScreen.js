@@ -61,17 +61,10 @@ class LoginScreen extends AppUtils {
 
             if (this.props.success) {
               if (this.props.response.status == constants.SUCCESS) {
-
-                this.setState({ phoneNumber: '' })
-                this.saveValueInSharedPref(constants.SP_IS_LOGGED_IN, constants.SP_IS_LOGGED_IN)
-                this.saveValueInSharedPref(constants.SP_USER_TOKEN, JSON.stringify(this.props.response.data.token))
-
-                this.showAlertMsg(this.props.response.message);
-
-                // this.props.navigation.navigate(constants.POSTS, {
-                //   userToken: token,
-                //   otherParam: 'Pass whatever you want here',
-                // });
+                
+                this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
+                  otpToken: this.props.response.data.token
+                });
 
               } else {
                 this.showAlertMsg(this.props.response.status.message);
@@ -100,7 +93,7 @@ class LoginScreen extends AppUtils {
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
 
         <Text
-          style={{ color: AppColors.COLOR_WHITE, fontSize: AppDimens.twenty, fontWeight: AppTexts.boldText, alignItems: AppTexts.centerText, marginTop: AppDimens.thirty }}
+          style={{ color: AppColors.COLOR_WHITE, fontSize: AppDimens.twenty, fontWeight: AppTexts.boldText, alignItems: AppTexts.centerText, marginTop: AppDimens.fifty }}
         >{constants.STR_LOGIN_INFO}</Text>
         <Text
           style={{ color: 'rgba(255,255,255,0.8)', fontSize: AppDimens.twenty, textAlign: AppTexts.centerText, marginTop: AppDimens.five }}
@@ -154,8 +147,7 @@ class LoginScreen extends AppUtils {
             // this.doUserLogin()
 
             this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
-              userToken: 'sdfa',
-              otherParam: 'Pass whatever you want here',
+              param: 'Pass whatever you want here',
             });
           }}>
 
