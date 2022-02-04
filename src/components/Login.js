@@ -21,13 +21,21 @@ class Login extends AppUtils {
 
   async doUserLogin() {
 
-    if (this.state.phoneNumber == '') {
+    if (this.state.phoneNumber === '') {
       this.showAlertMsg(constants.STR_PHONE_NO_REQUIRED);
       return
     }
 
-    let dataToSend = new FormData();
-    dataToSend.append('phone', '+923234245158')
+    // let dataToSend = new FormData();
+    // dataToSend.append('phone', this.state.phoneNumber)
+
+    // let dataToSend = JSON.stringify({
+    //   phone: this.state.phoneNumber
+    // })
+
+    let dataToSend = {
+      phone: this.state.phoneNumber
+    }
 
     // try {
 
@@ -52,7 +60,8 @@ class Login extends AppUtils {
           .then((res) => {
 
             if (this.props.success) {
-              if (this.props.response.status.code == '200') {
+              if (this.props.response.status == constants.SUCCESS) {
+
                 this.setState({ phoneNumber: '' })
                 this.saveValueInSharedPref(constants.SP_IS_LOGGED_IN, constants.SP_IS_LOGGED_IN)
                 this.saveValueInSharedPref(constants.SP_USER_TOKEN, JSON.stringify(this.props.response.data.token))
@@ -63,7 +72,7 @@ class Login extends AppUtils {
                 //   userToken: token,
                 //   otherParam: 'Pass whatever you want here',
                 // });
-                
+
               } else {
                 this.showAlertMsg(this.props.response.status.message);
               }
@@ -139,7 +148,12 @@ class Login extends AppUtils {
         <TouchableOpacity
           style={{ alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty, backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen }}
           onPress={() => {
-              this.doUserLogin()
+            // this.doUserLogin()
+
+            this.props.navigation.navigate(constants.POSTS, {
+              userToken: 'sdfa',
+              otherParam: 'Pass whatever you want here',
+            });
           }}>
 
           <Text
