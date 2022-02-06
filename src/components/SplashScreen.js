@@ -6,10 +6,8 @@ import AppUtils from '../utils/AppUtils'
 
 export default class SplashScreen extends AppUtils {
 
-    goToNextScreen = (launchScreen) => {
-        this.props.navigation.navigate(launchScreen, {
-            param: 'Pass whatever you want here',
-          });
+    goToNextScreen = (route, launchScreen) => {
+        this.props.navigation.navigate(route, { screen: launchScreen });
     }
 
     componentDidMount() {
@@ -25,8 +23,7 @@ export default class SplashScreen extends AppUtils {
                 .then((value) => {
                     if (value != null && value != undefined) {
                         if (value == constants.SP_IS_LOGGED_IN) {
-                            launchScreen = constants.HOME_SCREEN
-                            context.goToNextScreen(launchScreen)
+                            context.goToNextScreen('Home', constants.HOME_SCREEN )
                         } else {
                             context.goToNextScreen(launchScreen)
                         }

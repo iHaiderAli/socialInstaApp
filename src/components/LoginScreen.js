@@ -19,7 +19,7 @@ class LoginScreen extends AppUtils {
     this.state = { phoneNumber: '' }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.backPressed);
   }
   
@@ -46,31 +46,7 @@ class LoginScreen extends AppUtils {
       return
     }
 
-    let dataToSend = new FormData();
-    dataToSend.append('phone', this.state.phoneNumber)
-
-    // let dataToSend = JSON.stringify({
-    //   phone: this.state.phoneNumber
-    // })
-
-    // let dataToSend = {
-    //   phone: this.state.phoneNumber
-    // }
-
-    // try {
-
-    //   let fcmToken = await AsyncStorage.getItem(constants.FCM_TOKEN);
-    //   if (!fcmToken) {
-    //     this.showAlertMsg(constants.DEVICE_TOKEN_NOT_AVAILABLE)
-    //     return
-    //   }
-
-    //   dataToSend.append(constants.FCM_TOKEN_SMALL, fcmToken);
-    //   dataToSend.append(constants.DEVICE_ID, DeviceInfo.getDeviceId());
-
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    var dataToSend = { phone: this.state.phoneNumber };
 
     NetInfo.fetch().then(state => {
 
@@ -80,7 +56,7 @@ class LoginScreen extends AppUtils {
           .then((res) => {
 
             if (this.props.success) {
-              if (this.props.response.status == constants.SUCCESS) {
+              if (this.props.response.status.code == constants.SUCCESS_CODE) {
                 
                 this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
                   otpToken: this.props.response.data.token
@@ -164,11 +140,11 @@ class LoginScreen extends AppUtils {
             backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen
           }}
           onPress={() => {
-            // this.doUserLogin()
+            this.doUserLogin()
 
-            this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
-              param: 'Pass whatever you want here',
-            });
+            // this.props.navigation.navigate(constants.VERIFICATION_SCREEN, {
+            //   param: 'Pass whatever you want here',
+            // });
           }}>
 
           <Text

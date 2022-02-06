@@ -19,7 +19,7 @@ const TabTwoScreen = () => {
               textAlign: 'center',
               marginBottom: 16
             }}>
-            You are on Tab 2 Screen
+            Tab 2 Screen
           </Text>
         </View>
         

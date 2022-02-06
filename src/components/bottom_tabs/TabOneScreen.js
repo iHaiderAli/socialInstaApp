@@ -26,16 +26,15 @@ class TabOneScreen extends AppUtils {
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
 
-         {/* <TouchableOpacity
+         <TouchableOpacity
           style={{
-            alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.forty,
+            alignSelf: AppTexts.centerText, width: '80%', height: AppDimens.sixty, marginTop: AppDimens.twoHundred,
             backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen
           }}
           onPress={() => {
-           
-            this.props.navigation.navigate('Details', {
-              param: 'Pass whatever you want here',
-            });
+
+            this.clearAllSharedPrefs()
+            this.props.navigation.navigate(constants.LOGIN_SCREEN);
 
           }}>
 
@@ -44,9 +43,9 @@ class TabOneScreen extends AppUtils {
               color: AppColors.COLOR_WHITE, fontFamily: AppTexts.font_UbuntuCondensed,
               alignSelf: AppTexts.centerText, textAlignVertical: AppTexts.centerText, height: AppDimens.sixty
             }}
-          >{constants.STR_CONTINUE}</Text>
+          >{constants.STR_LOGOUT}</Text>
 
-        </TouchableOpacity> */}
+        </TouchableOpacity>
 
         {loading && <ActivityIndicator />}
 

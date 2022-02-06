@@ -25,14 +25,13 @@ class OTPVerificationScreen extends AppUtils {
       return
     }
 
-    let dataToSend = new FormData();
-    dataToSend.append('otp', this.state.otpNumber)
+    var dataToSend = { otp: this.state.otpNumber };
 
     NetInfo.fetch().then(state => {
 
       if (state.isConnected) {
 
-        this.props.sendRequestAction(constants.VERIFY_OTP, dataToSend, constants.METHOD_POST, "Bearer " +this.props.route.params.otpToken)
+        this.props.sendRequestAction(constants.VERIFY_OTP, dataToSend, constants.METHOD_POST, this.props.route.params.otpToken)
           .then((res) => {
 
             if (this.props.success) {
@@ -42,9 +41,7 @@ class OTPVerificationScreen extends AppUtils {
                 this.saveValueInSharedPref(constants.SP_IS_LOGGED_IN, constants.SP_IS_LOGGED_IN)
                 this.saveValueInSharedPref(constants.SP_USER_TOKEN, JSON.stringify(this.props.response.data.token))
 
-                this.props.navigation.navigate(constants.HOME_SCREEN, {
-                  param: 'Pass whatever you want here',
-                });
+                this.props.navigation.navigate('Home', { screen: constants.HOME_SCREEN });
 
               } else {
                 this.showAlertMsg(this.props.response.status.message);
@@ -69,7 +66,7 @@ class OTPVerificationScreen extends AppUtils {
 
     const { loading } = this.props;
     // Access the postId and otherParam via Destructuring assignment
-    // const { otpToken } = this.props.route.params;
+    const { otpToken } = this.props.route.params;
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
@@ -90,6 +87,7 @@ class OTPVerificationScreen extends AppUtils {
           autoCapitalize={"none"}
           placeholderTextColor={'rgba(255,255,255,0.3)'}
           value={this.state.otpNumber}
+          keyboardType="numeric"
           onChangeText={(input) => {
             this.setState({ otpNumber: input })
           }} />
@@ -100,15 +98,7 @@ class OTPVerificationScreen extends AppUtils {
             backgroundColor: AppColors.SECONDARY_COLOR, borderRadius: AppDimens.fifteen
           }}
           onPress={() => {
-            // this.verifyOTP()
-
-            this.props.navigation.navigate('Home', { screen: constants.HOME_SCREEN });
-
-
-            // this.props.navigation.navigate(constants.HOME_SCREEN, {
-            //   userToken: 'sdfa',
-            //   otherParam: 'Pass whatever you want here',
-            // });
+            this.verifyOTP()
           }}>
 
           <Text

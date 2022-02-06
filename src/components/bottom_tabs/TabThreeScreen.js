@@ -19,7 +19,7 @@ const TabThreeScreen = () => {
               textAlign: 'center',
               marginBottom: 16
             }}>
-            You are on Tab 3 Screen
+            Tab 3 Screen
           </Text>
         </View>
        

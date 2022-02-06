@@ -35,6 +35,7 @@ export const STR_LOGIN_INFO_1 = "Enter your mobile number to \n signup for SenPi
 export const STR_LOGIN_INFO_2 = "We texted you a code to \n verify your phone numbder"
 export const STR_CONTINUE = "CONTINUE"
 export const STR_OTP = "OTP number"
+export const STR_LOGOUT = "LOGOUT"
 
 //Warning msgs
 export const STR_PHONE_NO_REQUIRED = "Please enter phone number"
