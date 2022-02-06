@@ -46,18 +46,18 @@ export default class SplashScreen extends AppUtils {
 
             <SafeAreaView style={styles.container}>
 
-                {/* <ImageBackground
-                    source={AppIcons.LOGO_ICON}
-                    style={styles.container}> */}
+                <ImageBackground
+                    source={AppIcons.ICON_SPLASH}
+                    style={styles.container}>
 
-                    <View style={styles.imageContainer}>
+                    {/* <View style={styles.imageContainer}>
                         <Image
                             source={AppIcons.LOGO_ICON}
                             style={styles.logoStyle}
                         />
-                    </View>
+                    </View> */}
 
-                {/* </ImageBackground> */}
+                </ImageBackground>
 
             </SafeAreaView>
 

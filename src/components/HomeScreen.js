@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, BackHandler, Alert } from 'react-native';
 import AppUtils from "../utils/AppUtils";
 import * as constants from "../utils/AppConstants";
 import { AppTexts, AppColors} from '../utils/DesignConstants';
@@ -89,6 +89,26 @@ function Tab3Stack() {
 
 class HomeScreen extends AppUtils {
 
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.backPressed);
+  }
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
+  }
+
+  backPressed = () => {
+    Alert.alert(
+      'Exit App',
+      'Do you want to exit?',
+      [
+        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+      ],
+      { cancelable: false });
+      return true;
+  }
+
   render() {
     // Access the postId and otherParam via Destructuring assignment
     // const { postDetail } = this.props.route.params;
@@ -111,5 +131,6 @@ class HomeScreen extends AppUtils {
     );
   }
 }
+
 
 export default HomeScreen;

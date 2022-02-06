@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, BackHandler, Alert } from 'react-native';
 
 import * as constants from '../utils/AppConstants'
 import { AppTexts, AppColors, AppDimens } from '../utils/DesignConstants'
@@ -17,6 +17,26 @@ class LoginScreen extends AppUtils {
   constructor(props) {
     super(props);
     this.state = { phoneNumber: '' }
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.backPressed);
+  }
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
+  }
+
+  backPressed = () => {
+    Alert.alert(
+      'Exit App',
+      'Do you want to exit?',
+      [
+        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+      ],
+      { cancelable: false });
+      return true;
   }
 
   async doUserLogin() {

@@ -35,6 +35,7 @@ function AuthStack() {
       <AuthStackNavigator.Screen
         name={constants.SPLASH_SCREEN}
         component={SplashScreen}
+        options={{ headerShown: false }}
       />
       <AuthStackNavigator.Screen
         name={constants.LOGIN_SCREEN}
