@@ -69,7 +69,7 @@ class OTPVerificationScreen extends AppUtils {
 
     const { loading } = this.props;
     // Access the postId and otherParam via Destructuring assignment
-    const { otpToken } = this.props.route.params;
+    // const { otpToken } = this.props.route.params;
 
     return (
       <View style={{ flex: 1, alignItems: AppTexts.centerText, backgroundColor: AppColors.PRIMARY_COLOR }}>
@@ -102,10 +102,13 @@ class OTPVerificationScreen extends AppUtils {
           onPress={() => {
             // this.verifyOTP()
 
-            this.props.navigation.navigate(constants.HOME_SCREEN, {
-              userToken: 'sdfa',
-              otherParam: 'Pass whatever you want here',
-            });
+            this.props.navigation.navigate('Home', { screen: constants.HOME_SCREEN });
+
+
+            // this.props.navigation.navigate(constants.HOME_SCREEN, {
+            //   userToken: 'sdfa',
+            //   otherParam: 'Pass whatever you want here',
+            // });
           }}>
 
           <Text
